@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #141D48;
+        }
+
+        #main {
+            position: absolute;
+            left: 25%;
+            border: 20px solid #081C3D;
+        }
+
+        .pole {
+            height: 35px;
+            width: 35px;
+            float: left;
+            text-align: center;
+            color: white;
+        }
+
+        .ost {
+            clear: both;
+        }
+
+        #apple {
+            width: 35px;
+            height: 35px;
+        }
+    </style>
+</head>
+
+<body onkeypress="kPress(event)">
+    <script>
+        function init() {
+            var x = 1
+            var y = 1
+            let main = document.createElement("div")
+            main.id = "main"
+            document.body.appendChild(main)
+            while (y < 21) {
+                while (x < 21) {
+                    let pole = document.createElement("div")
+                    pole.id = x + "_" + y
+                    pole.classList = "pole"
+                    if (y % 2 == 0) {
+                        if (x % 2 == 0) {
+                            pole.style.backgroundColor = "#651E40"
+                        }
+                        else {
+                            pole.style.backgroundColor = "#461F3E"
+                        }
+                    }
+                    else {
+                        if (x % 2 == 0) {
+                            pole.style.backgroundColor = "#461F3E"
+                        }
+                        else {
+                            pole.style.backgroundColor = "#651E40"
+                        }
+                    }
+                    main.appendChild(pole)
+                    x = x + 1
+                }
+                x = 1
+                let ostatni = document.getElementById(x + "_" + y)
+                ostatni.classList.add("ost")
+                y = y + 1
+            }
+            let a = []
+            var licz = 0
+            var licz2 = 0
+            while (licz < 22) {
+                var b = []
+                while (licz2 < 22) {
+                    if (b.length == 0 || b.length == 21 || licz == 0 || licz == 21) {
+                        b.push("x")
+                    }
+                    else {
+                        b.push(0)
+                    }
+                    licz2 = licz2 + 1
+                }
+                a.push(b)
+                licz = licz + 1
+                licz2 = 0
+            }
+            var imag = document.createElement("img")
+            imag.id = "apple"
+            imag.src = `img/head/right.png`
+            var imagt = document.createElement("img")
+            imagt.id = "apple"
+            imagt.src = `img/tail/right.png`
+            document.getElementById("10_10").appendChild(imag)
+            document.getElementById("9_10").appendChild(imagt)
+            a[10][10] = "H"
+            a[10][9] = "T"
+            globalThis.a = a
+            var tab = []
+            globalThis.tab = tab
+            console.table(a)
+            console.log(a)
+            var gra = 0
+            globalThis.gra = gra
+            var current = "d"
+            globalThis.current = current
+            var tabbody = []
+            globalThis.tabbody = tabbody
+            jablko()
+        }
+        function kPress(input) {
+            if (input.key == "w" || input.key == "a" || input.key == "s" || input.key == "d") {
+                if ((current == "d" && input.key == "a") || (current == "a" && input.key == "d") || (current == "w" && input.key == "s") || (current == "s" && input.key == "w")) { }
+                else {
+                    var kierunek = input.key
+                    globalThis.kierunek = kierunek
+                    let interval = setInterval(ll, 150)
+                    if (gra == 1) {
+                        clearInterval(interval)
+                    }
+                    gra = 1
+                }
+            }
+        }
+        function ll() {
+            if (gra == 1) {
+                current = kierunek
+                var x = 0
+                var y = 0
+                while (x < 22) {
+                    while (y < 22) {
+                        if (a[x][y] == "H") {
+                            var headx = y
+                            var heady = x
+                            globalThis.headx = headx
+                            globalThis.heady = heady
+                            tab.push(headx)
+                            tab.push(heady)
+                        }
+                        if (a[x][y] == "T") {
+                            var tailx = y
+                            var taily = x
+                        }
+                        y = y + 1
+                    }
+                    y = 0
+                    x = x + 1
+                }
+                var xplus = 0
+                var yplus = 0
+                var im = ""
+                if (kierunek == "w") {
+                    yplus = -1
+                    im = "up"
+                }
+                else if (kierunek == "s") {
+                    yplus = 1
+                    im = "down"
+                }
+                else if (kierunek == "a") {
+                    xplus = -1
+                    im = "left"
+                }
+                else if (kierunek == "d") {
+                    xplus = 1
+                    im = "right"
+                }
+                tabbody.push(heady)
+                tabbody.push(headx)
+                globalThis.im = im
+                var imag = document.createElement("img")
+                imag.id = "apple"
+                imag.src = `img/head/${im}.png`
+                globalThis.imag = imag
+                var imagb = document.createElement("img")
+                imagb.id = "apple"
+                var imb = ""
+                if (heady + yplus == tabbody[0] || headx + xplus == tabbody[1]) {
+                    if (headx - tabbody[1] == -1) {
+                        imb = "right"
+                    }
+                    else if (headx - tabbody[1] == 1) {
+                        imb = "left"
+                    }
+                    else if (heady - tabbody[0] == 1) {
+                        imb = "up"
+                    }
+                    else if (heady - tabbody[0] == -1) {
+                        imb = "down"
+                    }
+                }
+                else {
+                    if (im == "up") {
+                        if (headx + xplus > tabbody[1]) {
+                            imb = "up_left"
+                        }
+                        else {
+                            imb = "up_right"
+                        }
+                    }
+                    else if (im == "down") {
+                        if (headx + xplus > tabbody[1]) {
+                            imb = "down_left"
+                        }
+                        else {
+                            imb = "down_right"
+                        }
+                    }
+                    else if (im == "left") {
+                        if (heady + yplus > tabbody[0]) {
+                            imb = "up_left"
+                        }
+                        else {
+                            imb = "down_left"
+                        }
+                    }
+                    else if (im == "right") {
+                        if (heady + yplus > tabbody[0]) {
+                            imb = "up_right"
+                        }
+                        else {
+                            imb = "down_right"
+                        }
+                    }
+                }
+                if (tabbody.length > 3) {
+                    tabbody.shift()
+                    tabbody.shift()
+                }
+                if (a[heady + yplus][headx + xplus] == "A") {
+                    a[heady][headx] = imb
+                    a[heady + yplus][headx + xplus] = "H"
+                    document.getElementById(`${headx + xplus}_${heady + yplus}`).removeChild(apple)
+                    document.getElementById(`${headx + xplus}_${heady + yplus}`).appendChild(imag)
+                    document.getElementById(`${heady}_${headx}`).innerHTML = ""
+                    imagb.src = `img/body/${imb}.png`
+                    document.getElementById(`${heady}_${headx}`).appendChild(imagb)
+                    jablko()
+                    plansza(taily, tailx)
+                }
+                else if (a[heady + yplus][headx + xplus] != 0) {
+                    przegrana()
+                }
+                else {
+                    a[heady][headx] = imb
+                    a[heady + yplus][headx + xplus] = "H"
+                    a[taily][tailx] = 0
+                    a[tab[1]][tab[0]] = "T"
+                    taily = tab[1]
+                    tailx = tab[0]
+                    tab.shift()
+                    tab.shift()
+                    plansza(taily, tailx)
+                }
+            }
+        }
+        function plansza(taily, tailx) {
+            var imtail = ""
+            if (tab.length == 0) {
+                imtail = im
+            }
+            else if (tailx - tab[0] == -1) {
+                imtail = "right"
+            }
+            else if (tailx - tab[0] == 1) {
+                imtail = "left"
+            }
+            else if (taily - tab[1] == 1) {
+                imtail = "up"
+            }
+            else if (taily - tab[1] == -1) {
+                imtail = "down"
+            }
+            var imagt = document.createElement("img")
+            imagt.id = "apple"
+            imagt.src = `img/tail/${imtail}.png`
+            var x = 1
+            var y = 1
+            while (x < 21) {
+                while (y < 21) {
+                    document.getElementById(`${x}_${y}`).innerHTML = ""
+                    if (a[y][x] == "H") {
+                        document.getElementById(`${x}_${y}`).appendChild(imag)
+                    }
+                    else if (a[y][x] == "T") {
+                        document.getElementById(`${x}_${y}`).appendChild(imagt)
+                    }
+                    else if (a[y][x] == "A") {
+                        document.getElementById(`${x}_${y}`).appendChild(apple)
+                    }
+                    else if (a[y][x] != 0) {
+                        var imagb = document.createElement("img")
+                        imagb.id = "apple"
+                        imagb.src = `img/body/${a[y][x]}.png`
+                        document.getElementById(`${x}_${y}`).appendChild(imagb)
+                    }
+                    else {
+                        document.getElementById(`${x}_${y}`).innerHTML = ""
+                    }
+                    y = y + 1
+                }
+                y = 1
+                x = x + 1
+            }
+        }
+        function jablko() {
+            var x = 0
+            var y = 0
+            var free = []
+            while (x < 21) {
+                while (y < 21) {
+                    if (a[y][x] == 0) {
+                        free.push(`${y}_${x}`)
+                    }
+                    y = y + 1
+                }
+                y = 0
+                x = x + 1
+            }
+            var los = Math.floor(Math.random() * free.length)
+            los = free[los]
+            var x = 0
+            var y = los.indexOf("_")
+            var losx = 0
+            var losy = 0
+            while (x < los.indexOf("_")) {
+                losx = losx + los[x]
+                x = x + 1
+            }
+            while (y < los.length + 1) {
+                losy = losy + los[y + 1]
+                y = y + 1
+            }
+            losx = parseInt(losx)
+            losy = parseInt(losy)
+            a[losx][losy] = "A"
+            var apple = document.createElement("img")
+            apple.id = "apple"
+            apple.src = "img/star2.png"
+            globalThis.apple = apple
+            document.getElementById(`${losy}_${losx}`).appendChild(apple)
+        }
+        function przegrana() {
+            for (i = 0; i < 100; i++) {
+                window.clearInterval(i)
+            }
+            alert("Koniec gry")
+        }
+        init()
+    </script>
+</body>
+
+</html>
